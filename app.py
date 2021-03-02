@@ -48,7 +48,7 @@ def add_new_record():
 
         finally:
             con.close()
-            return render_template('results.html', msg=msg)
+            return jsonify(msg)
 
 
 if __name__ == '__main__':
