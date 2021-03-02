@@ -15,15 +15,12 @@ def dict_factory(cursor, row):
 
 @app.route('/food/', methods=['GET'])
 def show_data():
-    try:
-        with sqlite3.connect('database.db') as con:
-            con.row_factory = dict_factory
-            cursor = con.cursor()
-            cursor.execute('SELECT * FROM calorie')
-            data = cursor.fetchall()
-        return jsonify(data)
-    except:
-        pass
+    with sqlite3.connect('database.db') as con:
+        con.row_factory = dict_factory
+        cursor = con.cursor()
+        cursor.execute('SELECT * FROM calorie')
+        data = cursor.fetchall()
+    return jsonify(data)
 
 
 @app.route('/add-new-record/', methods=['POST'])
