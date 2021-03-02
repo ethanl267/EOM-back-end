@@ -15,7 +15,7 @@ def dict_factory(cursor, row):
 
 @app.route('/food/', methods=['GET'])
 def show_data():
-    with sqlite3.connect('database.db') as con:
+    with sqlite3.connect('calories.db') as con:
         con.row_factory = dict_factory
         cursor = con.cursor()
         cursor.execute('SELECT * FROM calorie')
