@@ -18,34 +18,31 @@ def show_data():
     with sqlite3.connect('calories.db') as con:
         con.row_factory = dict_factory
         cursor = con.cursor()
-        cursor.execute('SELECT * FROM calorie')
+        cursor.execute('SELECT * FROM calorie track')
         data = cursor.fetchall()
     return jsonify(data)
 
 
-@app.route('/add-new-record/', methods=['POST'])
-def add_new_record():
-    if request.method == "POST":
-        msg = None
-        try:
-            name = request.form['name']
-            address = request.form['address']
-            city = request.form['city']
-            pin_code = request.form['pin-code']
+@app.route('/search-food/food?/', methods=['POST'])
+def search_Food():
+    try:
+        post_data = request.get_json()
+        morning = post_data['morning']
+        afternoon = post_data['afternoon']
+        evening = post_data['evening']
 
-            with sqlite3.connect('database.db') as con:
-                cur = con.cursor()
-                cur.execute("INSERT INTO student (name, address, city, pin_code) VALUES (?, ?, ?, ?)",
-                            (name, address, city, pin_code))
-                con.commit()
-                msg = name + " was successfully added to the database."
-        except Exception as e:
-            con.rollback()
-            msg = "Error occurred in insert operation: " + str(e)
+        con = sqlite3.connect("calories.db")
+        con.row_factory = dict_factory()
+        cur = con.cursor()
+        cur.execute("(SELECT * FROM calorie track where foods=?)", morning)
+        data = cur.fetchall()
+        print(data)
+        return jsonify(data)
+    except Exception as e:
+        print(e)
 
-        finally:
-            con.close()
-            return jsonify(msg)
+
+
 
 
 if __name__ == '__main__':
