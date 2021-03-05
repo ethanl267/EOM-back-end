@@ -11,4 +11,8 @@ MarkupSafe==1.1.1
 requests==2.25.1
 six==1.15.0
 urllib3==1.26.3
+<<<<<<< HEAD
 Werkzeug==1.0.1
+=======
+Werkzeug==1.0.1
+>>>>>>> 93d7631f31398bb0e61cf6c6cbe417d2cf86e681
