@@ -18,28 +18,35 @@ def show_data():
     with sqlite3.connect('calories.db') as con:
         con.row_factory = dict_factory
         cursor = con.cursor()
-        cursor.execute('SELECT * FROM calorie track')
+        cursor.execute("SELECT * FROM 'calorie track'")
         data = cursor.fetchall()
     return jsonify(data)
 
 
-@app.route('/search-food/food?/', methods=['POST'])
+@app.route('/search-food/food/', methods=['POST'])
 def search_Food():
     try:
         post_data = request.get_json()
         morning = post_data['morning']
         afternoon = post_data['afternoon']
-        evening = post_data['evening']
+        # evening = post_data['evening']
 
-        con = sqlite3.connect("calories.db")
-        con.row_factory = dict_factory()
-        cur = con.cursor()
-        cur.execute("(SELECT * FROM calorie track where foods=?)", morning)
-        data = cur.fetchall()
-        print(data)
-        return jsonify(data)
+        with sqlite3.connect('calories') as con:
+            con.row_factory = dict_factory
+            cur = con.cursor()
+            cur.execute("SELECT * FROM calorie_track WHERE foods=?", (morning,))
+            data = cur.fetchall()
+
+        with sqlite3.connect('calories') as con:
+            con.row_factory = dict_factory
+            cur = con.cursor()
+            cur.execute("SELECT * FROM calorie_track WHERE foods=?", (afternoon,))
+            data.append(cur.fetchall())
     except Exception as e:
-        print(e)
+        print('Something went wrong while feaching calorie track: ' + str(e))
+    finally:
+        con.close()
+        return jsonify(data)
 
 
 
